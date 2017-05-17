@@ -1,0 +1,45 @@
+XCMS course 2017
+========================================================
+author: 
+date: 
+autosize: true
+width: 2540
+height: 1429
+
+```{r, echo = FALSE}
+library(knitcitations)
+cite_options(     
+                  cite.style = "numeric"
+            )
+bib <- read.bibtex("bibliography.bib")
+```
+
+
+
+
+
+Outline (3)
+========================================================
+**Stats**
+- The fast way
+- Alternative stats
+
+
+Saving the peakpicking plots
+========================================================
+
+```{r, eval=FALSE}
+png(file="plots/EIC%d.png")
+xset <- xcmsSet(files[c(1,2,11,12,21,22)], 
+                BPPARAM  = SerialParam(),
+                method = 'centWave',
+                prefilter = c(3,1E3),
+                ppm = 20,
+                snthr = 5e3,
+                profparam = list(step=0.005),
+                peakwidth = c(0.05*60,0.20*60),
+                sleep=0.01)
+dev.off()
+```
+
+

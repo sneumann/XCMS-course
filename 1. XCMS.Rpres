@@ -28,24 +28,6 @@ Outline (1)
 
 
 
-Outline (2)
-========================================================
-
-**CAMERA**
-- Creating the CAMERA object (xsAnnotate)
-- Naive RT binning (groupFWHM)
-- Refining of groupings (groupCorr)
-- Isotope annotation (findIsotopes)
-- Adduct/fragment annotation (findAdducts)
-
-
-
-Outline (3)
-========================================================
-**Stats**
-- The fast way
-- Alternative stats
-
 
 
 What does the data look like? Why pre-processing?
@@ -372,37 +354,6 @@ Checking the results
 
 
 
-Creating the CAMERA object (xsAnnotate)
-========================================================
-- What is CAMERA?
-
-
-
-Naive RT binning (groupFWHM)
-========================================================
-- perfwhm
-
-
-
-Refining of groupings (groupCorr)
-========================================================
-- calcCaS
-- calcCiS
-- Choose wisely
-
-
-
-Isotope annotation (findIsotopes)
-========================================================
-
-
-
-Adduct/fragment annotation (findAdducts)
-========================================================
-- The rules list
-
-
-
 Bibliography
 ========================================================
 
@@ -410,17 +361,3 @@ Bibliography
 bibliography()
 ```
 
-
-
-
-png(file="plots/EIC%d.png")
-xset <- xcmsSet(files[c(1,2,11,12,21,22)], 
-                BPPARAM  = SerialParam(),
-                method = 'centWave',
-                prefilter = c(3,1E3),
-                ppm = 20,
-                snthr = 5e3,
-                profparam = list(step=0.005),
-                peakwidth = c(0.05*60,0.20*60),
-                sleep=0.01)
-dev.off()

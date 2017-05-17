@@ -808,35 +808,6 @@ hljs.initHighlightingOnLoad();
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>Outline (2)</h3>
-<div class="slideContent" >
-<p><strong>CAMERA</strong></p>
-
-<ul>
-<li>Creating the CAMERA object (xsAnnotate)</li>
-<li>Naive RT binning (groupFWHM)</li>
-<li>Refining of groupings (groupCorr)</li>
-<li>Isotope annotation (findIsotopes)</li>
-<li>Adduct/fragment annotation (findAdducts)</li>
-</ul>
-
-</div>
-
-</section>
-<section data-transition="linear" data-transition-speed="default">
-<h3>Outline (3)</h3>
-<div class="slideContent" >
-<p><strong>Stats</strong></p>
-
-<ul>
-<li>The fast way</li>
-<li>Alternative stats</li>
-</ul>
-
-</div>
-
-</section>
-<section data-transition="linear" data-transition-speed="default">
 <h3>What does the data look like? Why pre-processing?</h3>
 <div class="slideContent" >
 <ul>
@@ -1283,55 +1254,6 @@ XCMS uses this for some procedures instead of the full raw data. Think of it as 
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>Creating the CAMERA object (xsAnnotate)</h3>
-<div class="slideContent" >
-<ul>
-<li>What is CAMERA?</li>
-</ul>
-
-</div>
-
-</section>
-<section data-transition="linear" data-transition-speed="default">
-<h3>Naive RT binning (groupFWHM)</h3>
-<div class="slideContent" >
-<ul>
-<li>perfwhm</li>
-</ul>
-
-</div>
-
-</section>
-<section data-transition="linear" data-transition-speed="default">
-<h3>Refining of groupings (groupCorr)</h3>
-<div class="slideContent" >
-<ul>
-<li>calcCaS</li>
-<li>calcCiS</li>
-<li>Choose wisely</li>
-</ul>
-
-</div>
-
-</section>
-<section data-transition="linear" data-transition-speed="default">
-<h3>Isotope annotation (findIsotopes)</h3>
-<div class="slideContent" >
-
-</div>
-
-</section>
-<section data-transition="linear" data-transition-speed="default">
-<h3>Adduct&#x2F;fragment annotation (findAdducts)</h3>
-<div class="slideContent" >
-<ul>
-<li>The rules list</li>
-</ul>
-
-</div>
-
-</section>
-<section data-transition="linear" data-transition-speed="default">
 <h3>Bibliography</h3>
 <div class="slideContent" >
 <p>[1] C. a. Smith, E. J. Want, G. O&amp;apos;Maille, R. Abagyan, et al.
@@ -1350,18 +1272,6 @@ bioinformatics</em> 9.1 (nov. 2008), p. 504. ISSN: 1471-2105. DOI:
 http://www.biomedcentral.com/1471-2105/9/504/abstract
 http://www.biomedcentral.com/1471-2105/9/504
 http://www.biomedcentral.com/content/pdf/1471-2105-9-504.pdf>.</p>
-
-<p>png(file=&ldquo;plots/EIC%d.png&rdquo;)
-xset &lt;- xcmsSet(files[c(1,2,11,12,21,22)], 
-                BPPARAM  = SerialParam(),
-                method = &#39;centWave&#39;,
-                prefilter = c(3,1E3),
-                ppm = 20,
-                snthr = 5e3,
-                profparam = list(step=0.005),
-                peakwidth = c(0.05*60,0.20*60),
-                sleep=0.01)
-dev.off()</p>
 
 </div>
 
