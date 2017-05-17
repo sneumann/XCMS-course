@@ -1199,6 +1199,38 @@ A 2D plot is a reasonable way to look at this.</p>
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
+<h3>Peak picking - profparam</h3>
+<div class="slideContent" >
+<p><br>
+First we need to clear up the confusion about the difference between <em>profile mode</em> data and the <em>profile matrix</em>.
+<br></p>
+
+<p><strong>Profile mode:</strong> The data is continuous in the m/z dimension. As opposed to continuous mode data where you have discrete (sticks) in the m/z dimension.</p>
+
+<p><strong>Profile matrix:</strong> A rt (or scan rather) × m/z matrix of m/z slices.
+XCMS uses this for some procedures instead of the full raw data. Think of it as binned data with less m/z resolution.</p>
+
+<ul>
+<li>The profparam parameter says how fine the binning in the <em>Profile matrix</em> is gonna be.</li>
+<li>For high dimensional data the default setting can cause problems. So setting something like this will set it to 0.005 Da slices.</li>
+<li>It cannot be set too low as slices will be combined as needed. Only memory usage will increase.</li>
+</ul>
+
+<pre><code class="r">profparam = list(step=0.005)
+</code></pre>
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
+<h3>Peak picking - snthr</h3>
+<div class="slideContent" >
+<p>snthr = 5e3</p>
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
 <h3>Peak picking</h3>
 <div class="slideContent" >
 <p>N.B.: Waters&#39; data and <em>lockMassFreq</em>.</p>

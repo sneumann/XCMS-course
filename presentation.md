@@ -372,6 +372,40 @@ Peak picking - ppm
 
 
 
+Peak picking - profparam
+========================================================
+
+<br>
+First we need to clear up the confusion about the difference between *profile mode* data and the *profile matrix*.
+<br>
+
+**Profile mode:** The data is continuous in the m/z dimension. As opposed to continuous mode data where you have discrete (sticks) in the m/z dimension.
+
+**Profile matrix:** A rt (or scan rather) × m/z matrix of m/z slices.
+XCMS uses this for some procedures instead of the full raw data. Think of it as binned data with less m/z resolution.
+
+* The profparam parameter says how fine the binning in the *Profile matrix* is gonna be.
+* For high dimensional data the default setting can cause problems. So setting something like this will set it to 0.005 Da slices.
+* It cannot be set too low as slices will be combined as needed. Only memory usage will increase.
+
+```r
+profparam = list(step=0.005)
+```
+
+
+
+
+
+Peak picking - snthr
+========================================================
+
+snthr = 5e3
+               
+                
+                
+                
+
+
 Peak picking
 ========================================================
 
