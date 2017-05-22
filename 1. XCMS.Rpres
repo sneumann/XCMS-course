@@ -47,7 +47,7 @@ Simply to do. Difficult to do well. Impossible to do perfectly.
 Peak picking
 ========================================================
 
-- Two algoritms
+- Three algoritms
 - Finding reasonable peak width
 - profparam
 - prefilter
@@ -132,6 +132,8 @@ Peak picking - which method?
 * prefilter makes it faster
 * Usually the best if the data is "nice"
 
+<br>
+**massifquant**  `r citep(bib[["Conley2014"]])`
 
 Peak picking - What peak picking does `r citep(bib[["Tautenhahn2008"]])`
 ========================================================
