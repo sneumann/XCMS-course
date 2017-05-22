@@ -102,7 +102,7 @@ Now lets do the peak picking.<br>
 There are many parameters to set that we will explain in a sec.<br>
 There are a few more settings available but these are the most important.
 ```{r, cache=TRUE, message = FALSE}
-xset <- xcmsSet(files[c(1,2,11,12,21,22)], 
+xset <- xcmsSet(files, 
                 BPPARAM  = SerialParam(),
                 method = 'centWave',
                 prefilter = c(3,1E3),
@@ -117,9 +117,6 @@ xset <- xcmsSet(files[c(1,2,11,12,21,22)],
 
 Peak picking - which method?
 ========================================================
-
-TODO: someone should read the original papers and write something more intelligent... <br>
-TODO: can we find some comparison paper(s)?
 
 **matchedfilter** `r citep(bib[["Smith2006"]])`
 * Original algoritm
@@ -241,7 +238,7 @@ Peak picking - ppm
 ========================================================
 
 <br>
-ppm === Relative deviation in the m/z dimension
+ppm == Relative deviation in the m/z dimension
 
 <br>
 Do not trust the vendors number. Like the mileage of a car these numbers are far from true in real world scenarios.<br>
@@ -307,14 +304,19 @@ Peak picking - profparam
 First we need to clear up the confusion about the difference between *profile mode* data and the *profile matrix*.
 <br>
 
-**Profile mode:** The data is continuous in the m/z dimension. As opposed to continuous mode data where you have discrete (sticks) in the m/z dimension.
+**Profile mode:** The data is continuous in the *m/z* dimension.<br>
+As opposed to centroid mode data where you have discrete (sticks) in the *m/z* dimension.
 
-**Profile matrix:** A rt (or scan rather) × m/z matrix of m/z slices.
-XCMS uses this for some procedures instead of the full raw data. Think of it as binned data with less m/z resolution.
+**Profile matrix:** A rt (or scan rather) × *m/z* matrix of *m/z* slices.<br>
+XCMS uses this for some procedures instead of the full raw data. Think of it as binned data with less *m/z* resolution.
 
-* The profparam parameter says how fine the binning in the *Profile matrix* is gonna be.
+<br>
+* The profparam parameter says how fine the binning in the *Profile matrix* is going to be.
 * For high dimensional data the default setting can cause problems. So setting something like this will set it to 0.005 Da slices.
 * It cannot be set too low as slices will be combined as needed. Only memory usage will increase.
+
+<br>
+
 ```{r, eval=FALSE}
 profparam = list(step=0.005)
 ```
@@ -326,26 +328,156 @@ profparam = list(step=0.005)
 Peak picking - snthr
 ========================================================
 
+Signal to noise ratio. It really depends on your data. And it is defined differently for centWave and matchedfilter.
+
+For centWave I would start with:
+
+```{r, eval=FALSE}
 snthr = 5e3
+```
+
+For matchedfilter I would start with:
+
+```{r, eval=FALSE}
+snthr = 5
+```
                
-                
-                
-                
-
-
-Peak picking
-========================================================
-
-N.B.: Waters' data and *lockMassFreq*.
+<br>
+If low peaks that you would like to include are missing lower the value.
 
 
 
 
 Grouping and retention time correction
 ========================================================
+
+This step tries to group/match features between samples.<br>
+**This is probably the most important step!**
+
+It is a 3 step procedure:
+
+1. Features are grouped according to RT. Loose parameters for matching is used.
+2. The matched features are used to model RT shifts. --> retention time correction/alignment.
+3. Using the corrected RTs features are matched again with stricter criteria.
+
+<br>
+There are three methods for retention time correction/alignment.
+
+1. **LOESS:** Fits a LOESS curve between retention times. Works on the peaktable (therefore fast). The default and usually no reason to look further.
+2. **Obiwarp:** Warps the raw data (and hence slow) to a reference sample. Can handle dramatic shifts. Often overfitting. Use if needed with great attention.
+3. **Linear:** When all else fails.
+
+
+Grouping and retention time correction - group
+========================================================
+
+```{r, cache=TRUE, message = FALSE}
+xset_g <- group(xset, 
+                bw = 0.2*60, 
+                minfrac = 0.5, 
+                minsamp = 5, 
+                mzwid = 0.05, 
+                max = 20, 
+                sleep = 0
+                )
+
+xset_g
+```
+
+
+
+Grouping and retention time correction - group bw
+========================================================
+incremental: true
+
+*TODO: density plot?*
+
+**bw**: bandwidth (standard deviation or half width at half maximum) of gaussian smoothing kernel to apply to the peak density chromatogram. <br>
+
+Sounds very difficult but it roughly translates to:<br>
+The maximum expected RT deviation across samples.
+
+<br>
+Overlay the BPI and find the peak with the highest deviation.
+<br>
+
+<div  class="fragment" align="center">
+<img src="_images/group_bw.png" height=1000px>
+</div>
+
+
+Grouping and retention time correction - group bw
+========================================================
+
+Here we have zoomed. Compare peak apexes.
+
+<br>
+<div align="center">
+<img src="_images/group_bw_zoom.png" height=800px>
+</div>
+
+
+Calculate the deviation.
+```{r}
+4.90-4.78
+```
+
+Since there could be small peaks with larger variation than what we found we bump it up to 0.2 min.
+
+
+Grouping and retention time correction - minfrac/minsamp
+========================================================
+
+```{r, eval=FALSE}
+minfrac = 0.5
+minsamp = 5
+```
+
+<br>
+
+**minsamp:** minimum number of samples a peak should be found in.
+
+**minfrac:** minimum fraction of samples a peak should be found in.
+
+<br>
+**These are used** ***per group***.
+
+Files in different subfolders are considered different groups.<br>
+The groups can be manipulated by changing:
+
+```{r}
+head(xset@phenoData)
+```
+
+In this dataset we had 3 groups with 9 samples in each. The first time we do the grouping we are pretty liberal with how often it should be found.
+
+Grouping and retention time correction - minfrac/minsamp
+========================================================
+
+<br>
+
+**Consider your experimental design and group VERY carefully when you set these parameters!**
+
+Example:
+
+
+1. You put all files on one folder.
+2. You have 2 study groups with each 20 samples. So 40 samples in total.
+3. You set:
+  ```{r, eval=FALSE}
+  minfrac = 0.7
+  minsamp = 30
+  ```
+4. **You have now removed everything that is unique to one group!** <br>So possibly the most important features have been removed.
+
+
+
+Grouping and retention time correction - minfrac/minsamp
+========================================================
+
 - LOESS fitting is default
 - More  features are not always good
-- minsamp/minfrac is per group and critical
+- minsamp/minfrac is per group and critical. phenoData
 - bw
 - retcor
   - span
